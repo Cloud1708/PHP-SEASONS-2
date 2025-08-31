@@ -166,6 +166,7 @@ if(isset($_POST["btnRegister"])) {
                                     $mail->Port = 587;
                                     // Set sender
                                     $mail->setFrom('noreply@yourdomain.com', 'Secret');
+                                    // Generate one at https://myaccount.google.com/apppasswords
                                     // Add recipient
                                     $mail->addAddress($email);
 
