@@ -1,4 +1,16 @@
+
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
+include("nav.php");
+
+ include("connections.php");
 
 $first_name = $middle_name = $last_name = $gender = $preffix = $seven_digit = $email = "";
 
@@ -127,13 +139,52 @@ if(isset($_POST["btnRegister"])) {
                                         return $shuffled;
                                     }
 
-                                    $password = random_password(8);
 
-                                    include("connections.php");
+                                    $new_password = random_password(8);
 
-                                    mysqli_query($connections, "INSERT INTO tbl_user (first_name, middle_name, last_name, gender, preffix, seven_digit, email, password) VALUES ('$first_name', '$middle_name', '$last_name', '$gender', '$preffix', '$seven_digit', '$email', '$password')");
+                                    $message = $new_password;
 
-                                    echo "<script>window.location.href='success.php';</script>";
+
+                                    require 'PHPMailer/src/PHPMailer.php';
+                                    require 'PHPMailer/src/SMTP.php';
+                                    require 'PHPMailer/src/Exception.php';
+
+                                    $mail = new PHPMailer(true);
+
+                                    $mail->isSMTP();
+
+                                    $mail->Host = 'smtp.gmail.com';
+
+                                    $mail->SMTPAuth = true;
+
+                                    $mail->Username = 'criscarloh@gmail.com';
+
+                                    $mail->Password = 'uebp zyry pnxi przp';
+
+                                    $mail->SMTPSecure = 'tls';
+
+                                    $mail->Port = 587;
+                                    // Set sender
+                                    $mail->setFrom('noreply@yourdomain.com', 'Secret');
+                                    // Add recipient
+                                    $mail->addAddress($email);
+
+                                    $mail->isHTML(true);
+
+                                    $mail->addCustomHeader('MIME-Version', '1.0');
+                                    $mail->addCustomHeader('X-Priority', '1');
+
+                                    $mail->Subject = 'Thank you!';
+                                    $mail->Body = $new_password . "\n\nVisit our GitHub: https://github.com/Cloud1708/PHP-SEASONS-2";
+
+                                    if(!$mail->send()) {
+
+                                        echo 'Message could not be sent.';
+                                        echo "Mailer Error: " . $mail->ErrorInfo;
+                                    } else {
+                                        mysqli_query($connections, "INSERT INTO tbl_user (first_name, middle_name, last_name, gender, preffix, seven_digit, email, password,account_type) VALUES ('$first_name', '$middle_name', '$last_name', '$gender', '$preffix', '$seven_digit', '$email', '$new_password' , '2')");
+                                        echo "<script>window.location.href='success.php';</script>";
+                                    }
 
                                 }
 
@@ -152,6 +203,8 @@ if(isset($_POST["btnRegister"])) {
     }
 
 }
+
+
 
 ?>
 
