@@ -176,7 +176,7 @@ if(isset($_POST["btnRegister"])) {
                                     $mail->addCustomHeader('X-Priority', '1');
 
                                     $mail->Subject = 'Thank you!';
-                                    $mail->Body = $new_password . "\n\nVisit our GitHub: https://github.com/Cloud1708/PHP-SEASONS-2";
+                                    $mail->Body =  $new_password;
 
                                     if(!$mail->send()) {
 
